@@ -1,0 +1,7 @@
+@baseUrl = http://localhost:2323
+
+### Generate email and get auth token
+GET {{baseUrl}}/generate
+
+### Get messages using the auth token from generate response
+GET {{baseUrl}}/messages?authtoken=YOUR_AUTH_TOKEN_HERE
