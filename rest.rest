@@ -1,7 +1,11 @@
 @baseUrl = http://localhost:2323
+@Access_token = acess token here
 
 ### Generate email and get auth token
 GET {{baseUrl}}/generate
 
-### Get messages using the auth token from generate response
-GET {{baseUrl}}/messages?authtoken=YOUR_AUTH_TOKEN_HERE
+### Get all messages using the auth token from generate response
+GET {{baseUrl}}/messages?authtoken={{Access_token}}
+
+### Get single message using messageid and auth token
+GET {{baseUrl}}/message?authtoken={{Access_token}}&messageid=MSGIDHERE

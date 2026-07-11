@@ -1,10 +1,8 @@
 import express from 'express';
-import axios from 'axios';
+import proxyReq from './util/proxyReq.js';
 
 const app = express();
 const port = 2323;
-
-const SCRAPER_API_KEY = '134ecdbc1e0bf4565004cfa789f280fb';
 
 const BASE_HEADERS = {
     'accept': '*/*',
@@ -24,9 +22,9 @@ const BASE_HEADERS = {
 app.get('/generate', async (req, res) => {
     try {
         const config = {
+            url: `https://web2.temp-mail.org/mailbox`,
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://api.scraperapi.com/?api_key=${SCRAPER_API_KEY}&url=https://web2.temp-mail.org/mailbox&keep_headers=true`,
             headers: {
                 ...BASE_HEADERS,
                 'content-length': '0',
@@ -34,7 +32,7 @@ app.get('/generate', async (req, res) => {
             }
         };
 
-        const response = await axios.request(config);
+        const response = await proxyReq(config, true);
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -52,14 +50,44 @@ app.get('/messages', async (req, res) => {
         const config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `https://api.scraperapi.com/?api_key=${SCRAPER_API_KEY}&url=https://web2.temp-mail.org/messages&keep_headers=true`,
+            url: `https://web2.temp-mail.org/messages`,
             headers: {
                 ...BASE_HEADERS,
                 'authorization': `Bearer ${authToken}`
             }
         };
 
-        const response = await axios.request(config);
+        const response = await proxyReq(config);
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/message', async (req, res) => {
+    const authToken = req.query.authtoken;
+    const messageId = req.query.messageid;
+
+    if (!authToken) {
+        return res.status(400).json({ error: 'authtoken is required' });
+    }
+
+    if (!messageId) {
+        return res.status(400).json({ error: 'messageid is required' });
+    }
+
+    try {
+        const config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `https://web2.temp-mail.org/messages/${messageId}`,
+            headers: {
+                ...BASE_HEADERS,
+                'authorization': `Bearer ${authToken}`
+            }
+        };
+
+        const response = await proxyReq(config);
         res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
