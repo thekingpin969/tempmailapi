@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import proxyReq from './util/proxyReq.js';
-import { addKey, getKeyStatuses, removeKey, getCreditsByProvider } from './util/apiKeyManager.js';
+import { addKey, getKeyStatuses, removeKey, getCreditsByProvider, initDatabase } from './util/apiKeyManager.js';
 
 const app = express();
 const port = process.env.PORT || 2323;
@@ -135,6 +135,7 @@ app.delete('/keys', async (req, res) => {
     res.json(await removeKey(key));
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    await initDatabase();
     console.log(`Mail API server running on http://localhost:${port}`);
 });

@@ -19,6 +19,17 @@ function getPool() {
   return pool;
 }
 
+export async function initDatabase() {
+  const client = getPool();
+  try {
+    await client.query('SELECT 1');
+    console.log('✅ Database connected successfully');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    throw error;
+  }
+}
+
 const DEFAULTS = {
   monthlyCredits: 1000,
   maxConcurrent: 5,
