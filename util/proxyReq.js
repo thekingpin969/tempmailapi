@@ -1,25 +1,31 @@
-import axios from 'axios'
+import axios from 'axios';
+import { getKey, releaseKey, useCredits } from './apiKeyManager.js';
 
-// Example usage:
-// import proxyReq from './util/proxyReq'
-// const response = await proxyReq({
-//   method: 'get',
-//   url: 'https://api.example.com/data',
-//   headers: { 'Authorization': 'Bearer token' }
-// })
-// console.log(response.data)
-
-const SCRAPER_API_KEY = '37901fa7bc2b2aa175b4c14fe2aa393e';
+const SCRAPER_API_BASE = 'https://api.scraperapi.com/';
+const DEFAULT_COST = 10;
 
 async function proxyReq(params, keep_headers = true) {
-    try {
-        return await axios({ ...params, url: `https://api.scraperapi.com/?api_key=${SCRAPER_API_KEY}&url=${params.url}&keep_headers=${keep_headers}` })
-    } catch (error) {
-        if (error.response) {
-            throw error.response.data || error.response
-        }
-        throw error
+  let apiKey = null;
+  
+  try {
+    apiKey = getKey();
+    
+    const proxyUrl = `${SCRAPER_API_BASE}?api_key=${apiKey}&url=${params.url}&keep_headers=${keep_headers}`;
+    const response = await axios({ ...params, url: proxyUrl });
+    
+    useCredits(apiKey, DEFAULT_COST);
+    
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data || error.response;
     }
+    throw error;
+  } finally {
+    if (apiKey) {
+      releaseKey(apiKey);
+    }
+  }
 }
 
 export default proxyReq;

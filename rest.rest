@@ -1,5 +1,32 @@
 @baseUrl = http://localhost:2323
 @Access_token = acess token here
+@Api_key = api key here
+
+### ========================================
+### API Key Management
+### ========================================
+
+### List all keys with status
+GET {{baseUrl}}/keys
+
+### Add new key with full metadata
+POST {{baseUrl}}/add-key?key={{Api_key}}&provider=scraperapi&label=backup-key&resetDay=15&monthlyCredits=2000&maxConcurrent=5
+
+### Add key with just the key (defaults: resetDay=1)
+POST {{baseUrl}}/add-key?key={{Api_key}}
+
+### Add key with custom reset day (1-31) - resets on that day each month
+POST {{baseUrl}}/add-key?key={{Api_key}}&resetDay=18
+
+### Delete a key
+DELETE {{baseUrl}}/keys?key={{Api_key}}
+
+### Get credits remaining by provider
+GET {{baseUrl}}/credits
+
+### ========================================
+### Mail API
+### ========================================
 
 ### Generate email and get auth token
 GET {{baseUrl}}/generate
@@ -9,3 +36,5 @@ GET {{baseUrl}}/messages?authtoken={{Access_token}}
 
 ### Get single message using messageid and auth token
 GET {{baseUrl}}/message?authtoken={{Access_token}}&messageid=MSGIDHERE
+
+

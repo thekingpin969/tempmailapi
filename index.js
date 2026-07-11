@@ -1,5 +1,6 @@
 import express from 'express';
 import proxyReq from './util/proxyReq.js';
+import { addKey, getKeyStatuses, removeKey, getCreditsByProvider } from './util/apiKeyManager.js';
 
 const app = express();
 const port = 2323;
@@ -92,6 +93,45 @@ app.get('/message', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+app.post('/add-key', (req, res) => {
+    const { key, provider, label, resetDay, monthlyCredits, maxConcurrent } = req.query;
+
+    if (!key) {
+        return res.status(400).json({ error: 'key query parameter is required' });
+    }
+
+    const metadata = {
+        provider: provider || undefined,
+        label: label || undefined,
+        resetDay: resetDay ? parseInt(resetDay, 10) : undefined,
+        monthlyCredits: monthlyCredits ? parseInt(monthlyCredits, 10) : undefined,
+        maxConcurrent: maxConcurrent ? parseInt(maxConcurrent, 10) : undefined
+    };
+
+    Object.keys(metadata).forEach(k => metadata[k] === undefined && delete metadata[k]);
+
+    const result = addKey(key, metadata);
+    res.json(result);
+});
+
+app.get('/keys', (req, res) => {
+    res.json(getKeyStatuses());
+});
+
+app.get('/credits', (req, res) => {
+    res.json(getCreditsByProvider());
+});
+
+app.delete('/keys', (req, res) => {
+    const { key } = req.query;
+    
+    if (!key) {
+        return res.status(400).json({ error: 'key query parameter is required' });
+    }
+
+    res.json(removeKey(key));
 });
 
 app.listen(port, () => {
