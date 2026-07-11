@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:2323
 # @baseUrl = https://blonde-tiphany-soulfox-b5812388.koyeb.app
 @Access_token = acess token here
-@Api_key = cc71b1ba9f3ac895e55c266b8963fd2d
+@Api_key = api key here
 
 ### ========================================
 ### API Key Management
@@ -20,7 +20,7 @@ POST {{baseUrl}}/add-key?key={{Api_key}}
 POST {{baseUrl}}/add-key?key={{Api_key}}&resetDay=18
 
 ### Delete a key
-DELETE {{baseUrl}}/keys?key={{Api_key}}
+DELETE {{baseUrl}}/keys?key=test-api-key-123
 
 ### Get credits remaining by provider
 GET {{baseUrl}}/credits
