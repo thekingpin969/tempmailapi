@@ -1,9 +1,10 @@
+import 'dotenv/config';
 import express from 'express';
 import proxyReq from './util/proxyReq.js';
 import { addKey, getKeyStatuses, removeKey, getCreditsByProvider } from './util/apiKeyManager.js';
 
 const app = express();
-const port = 2323;
+const port = process.env.PORT || 2323;
 
 const BASE_HEADERS = {
     'accept': '*/*',
@@ -95,7 +96,7 @@ app.get('/message', async (req, res) => {
     }
 });
 
-app.post('/add-key', (req, res) => {
+app.post('/add-key', async (req, res) => {
     const { key, provider, label, resetDay, monthlyCredits, maxConcurrent } = req.query;
 
     if (!key) {
@@ -112,26 +113,26 @@ app.post('/add-key', (req, res) => {
 
     Object.keys(metadata).forEach(k => metadata[k] === undefined && delete metadata[k]);
 
-    const result = addKey(key, metadata);
+    const result = await addKey(key, metadata);
     res.json(result);
 });
 
-app.get('/keys', (req, res) => {
-    res.json(getKeyStatuses());
+app.get('/keys', async (req, res) => {
+    res.json(await getKeyStatuses());
 });
 
-app.get('/credits', (req, res) => {
-    res.json(getCreditsByProvider());
+app.get('/credits', async (req, res) => {
+    res.json(await getCreditsByProvider());
 });
 
-app.delete('/keys', (req, res) => {
+app.delete('/keys', async (req, res) => {
     const { key } = req.query;
-    
+
     if (!key) {
         return res.status(400).json({ error: 'key query parameter is required' });
     }
 
-    res.json(removeKey(key));
+    res.json(await removeKey(key));
 });
 
 app.listen(port, () => {

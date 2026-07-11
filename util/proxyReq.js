@@ -8,12 +8,12 @@ async function proxyReq(params, keep_headers = true) {
   let apiKey = null;
   
   try {
-    apiKey = getKey();
+    apiKey = await getKey();
     
     const proxyUrl = `${SCRAPER_API_BASE}?api_key=${apiKey}&url=${params.url}&keep_headers=${keep_headers}`;
     const response = await axios({ ...params, url: proxyUrl });
     
-    useCredits(apiKey, DEFAULT_COST);
+    await useCredits(apiKey, DEFAULT_COST);
     
     return response;
   } catch (error) {
@@ -23,7 +23,7 @@ async function proxyReq(params, keep_headers = true) {
     throw error;
   } finally {
     if (apiKey) {
-      releaseKey(apiKey);
+      await releaseKey(apiKey);
     }
   }
 }

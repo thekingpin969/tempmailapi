@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:2323
+# @baseUrl = https://blonde-tiphany-soulfox-b5812388.koyeb.app
 @Access_token = acess token here
-@Api_key = api key here
+@Api_key = cc71b1ba9f3ac895e55c266b8963fd2d
 
 ### ========================================
 ### API Key Management
