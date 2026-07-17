@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:2323
-# @baseUrl = https://blonde-tiphany-soulfox-b5812388.koyeb.app
-@Access_token = acess token here
-@Api_key = api key here
+# @baseUrl = https://worthwhile-catriona-soulfox-9753c1f0.koyeb.app
+@Access_token = auth token here
+@Api_key = api-key-here
 
 ### ========================================
 ### API Key Management
@@ -11,16 +11,16 @@
 GET {{baseUrl}}/keys
 
 ### Add new key with full metadata
-POST {{baseUrl}}/add-key?key={{Api_key}}&provider=scraperapi&label=backup-key&resetDay=15&monthlyCredits=2000&maxConcurrent=5
+POST {{baseUrl}}/add-key?key={{Api_key}}&provider=scrapedo&label=backup-key&resetDay=15&monthlyCredits=2000&maxConcurrent=5
 
 ### Add key with just the key (defaults: resetDay=1)
 POST {{baseUrl}}/add-key?key={{Api_key}}
 
 ### Add key with custom reset day (1-31) - resets on that day each month
-POST {{baseUrl}}/add-key?key={{Api_key}}&resetDay=18
+POST {{baseUrl}}/add-key?key={{Api_key}}&resetDay=17
 
 ### Delete a key
-DELETE {{baseUrl}}/keys?key=test-api-key-123
+DELETE {{baseUrl}}/keys?key=api-key-here
 
 ### Get credits remaining by provider
 GET {{baseUrl}}/credits
@@ -36,6 +36,6 @@ GET {{baseUrl}}/generate
 GET {{baseUrl}}/messages?authtoken={{Access_token}}
 
 ### Get single message using messageid and auth token
-GET {{baseUrl}}/message?authtoken={{Access_token}}&messageid=MSGIDHERE
+GET {{baseUrl}}/message?authtoken={{Access_token}}&messageid=msg_id
 
 
